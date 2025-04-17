@@ -1,3 +1,27 @@
+# MatX React Admin Dashboard
+
+Modern admin dashboard template built with React, Material-UI and Firebase authentication.
+
+## Features
+
+- Firebase Authentication
+- Material-UI Components
+- React Hooks
+- Modern and Responsive Design
+- Multiple Authentication Methods
+- Dashboard Analytics
+- And more...
+
+## Getting Started
+
+1. Clone the repository
+2. Install dependencies: `npm install` or `yarn`
+3. Start the development server: `npm start` or `yarn start`
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
 <h1><a href="https://ui-lib.com/downloads/matx-react-dashboard/">Matx React Material Design Admin Dashboard Template</a></h1>
 
 <a href="https://matx-react-free.netlify.app/">
