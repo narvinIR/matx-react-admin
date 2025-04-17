@@ -1,0 +1,216 @@
+Guide for the "Marketplace Analytics Dashboard" Application for IDE Cursor
+Project Overview
+"Marketplace Analytics Dashboard" is a web application for sellers on Russian marketplaces (Wildberries, Ozon, Yandex.Market), offering analytics, automation, and business process management. It competes with services like MP Stats and JVO Marpla, providing a universal platform with a focus on automation and integration. The application collects data from platforms, analyzes it, and provides recommendations through an interactive dashboard.
+
+Application Concept
+The goal is to simplify sales management on marketplaces by providing sellers with:
+
+Real-time: Analytics of sales, inventory, and competitors in real-time.
+Automation: Management of pricing, advertising, and reviews.
+Integration: Embedded tables, export to Google Sheets, notifications via Telegram, WhatsApp.
+Simplicity: Intuitive interface with a minimalist design.
+The application targets small and medium businesses, offering a freemium model (basic plan free, premium — 999–9999 RUB/month) with bonuses like a 7-day trial period.
+
+Key Features
+1. Authentication and User Management
+Logic: Users register and log in via email/password using Firebase Authentication. Option to register as a seller or supplier (to offer goods to sellers at special prices). Data (email, API keys) is stored in Firestore.
+Features:
+Registration and login forms with role selection (seller/supplier).
+Redirect to dashboard after authentication.
+Storage of user settings in Firestore.
+2. Dashboard
+Logic: Central interface with a sidebar navigation and sections: Analytics, Inventory, Products, Orders, Sales, Advertising, Promotions, Reviews, Chats, Competitors, Settings.
+Features:
+Widgets with key metrics (revenue, order volume, redemption rate).
+Embedded tables with data (sales, orders, products) featuring filters and sorting.
+Charts and diagrams (Chart.js) for key metrics, customizable by the user.
+Automation of metrics: notifications, auto-updates.
+3. Data Collection and Integration
+Logic: Use existing Google Apps Script (GAS) for API requests to marketplaces (Wildberries, Ozon, Yandex.Market). Competitor parsing via existing GAS scripts or Python with Puppeteer through Cloud Functions.
+Features:
+UI for running GAS scripts: buttons for API requests and parsing.
+Display results in embedded tables within the application.
+Export data to Google Sheets (sales, orders, products).
+Store data in Firestore.
+Competitor Parsing via Puppeteer (Detailed)
+Description: Puppeteer is a browser automation tool that can be used to parse data unavailable through APIs (e.g., competitor prices, promotions). Implementation via Cloud Functions involves:
+A Cloud Function receives a request (e.g., competitor URL).
+Puppeteer runs in headless mode, loads the page, and extracts data.
+Data is saved to Firestore or returned to the application.
+UI: A "Run Competitor Parsing" button in the "Competitors" section. Users enter a URL or select a competitor from a list, and data is displayed in a table.
+Alternative: Use existing GAS scripts for parsing, integrating them into the application UI (button to trigger parsing, results in a table). Needs discussion on preferred approach: GAS or Puppeteer.
+Embedded Tables and Export to Google Sheets
+Description: Tables with data (sales, orders, products) are embedded using Material-UI DataGrid. Users can customize display (filters, sorting, columns). Automation of metrics: auto-updates, notifications (e.g., "Inventory below 10 units"). Export to Google Sheets via Google Sheets API.
+Capabilities:
+Embedded Tables: Display sales, orders, products in the "Analytics" section. Customizable filters (by date, category), sorting, column selection.
+Charts and Widgets: Chart.js for visualizing key metrics (sales, orders, inventory) with customization (select period, chart type: line, bar).
+Automation: Auto-update settings (every 5 minutes), notifications (e.g., "Low inventory").
+Export: "Export to Google Sheets" button to create tables (sales, orders, products) in Google Sheets.
+Coordination: Need to discuss table structure, chart design, and automation settings.
+Creating Tables in Google Sheets
+Logic: Google Sheets API creates tables for:
+Sales: Date, product, quantity, amount.
+Orders: Order number, date, status, amount.
+Products: Name, SKU, price, inventory.
+UI: "Export" button in the "Analytics" section. Needs discussion on data to include in tables.
+4. Analytics and Visualization
+Description: Data analysis using embedded tables and Chart.js. Data is sourced from Firestore after processing by GAS scripts.
+Capabilities:
+Charts for sales, inventory, competitors with customization (period, chart type).
+Filters and sorting in tables (by date, category, warehouse).
+Widgets with metrics (revenue, redemption rate).
+Coordination: Need to discuss metrics to visualize, chart design.
+5. Automation
+Description: Use existing GAS scripts for automation (pricing, advertising, reviews). Cloud Functions for additional tasks.
+Capabilities:
+Repricer: Price adjustment via GAS scripts.
+Bidder: Advertising bid optimization.
+Review Automation: Integration of GAS scripts for AI responses to reviews with UI (button "Respond to Reviews").
+Coordination: Discuss which scripts to use, how to integrate into UI.
+6. Notifications and Interaction
+Description: Send notifications via Telegram, WhatsApp, Firebase Cloud Messaging.
+Capabilities:
+Notifications about low inventory, competitor price changes.
+Integration with Telegram and WhatsApp via API (e.g., sending notifications to chats).
+Coordination: Discuss notification format and APIs for Telegram/WhatsApp.
+7. Integrations
+Description: Integration with Google Sheets, Calendar, Trends, Analytics, 1C, Bitrix24, MoySklad.
+Capabilities:
+Export to Google Sheets (sales, orders, products).
+Google Calendar: scheduling promotions.
+Google Trends: trend analysis.
+Google Analytics: traffic analytics.
+1C, Bitrix24, MoySklad: data synchronization (sales, inventory).
+Coordination: Discuss integration priorities, APIs.
+Technology Stack
+Frontend
+React: Main framework (React).
+Material-UI: Design components (DataGrid, Buttons, Charts).
+Chart.js: Data visualization.
+React Router: Navigation.
+Axios: API requests (for GAS integration).
+Backend
+Firebase Authentication: Authentication.
+Firestore: Database.
+Cloud Functions: Server logic.
+Firebase Cloud Messaging: Notifications.
+Additional Tools
+Google Apps Script (GAS): API requests and parsing for marketplaces.
+Puppeteer: Parsing via Cloud Functions (alternative to GAS).
+Google APIs: Integration with Sheets, Calendar, Trends, Analytics.
+Vite: Build and development.
+Git/GitHub: Version control.
+Development Environments
+Firebase Studio: Main cloud environment.
+IDE Cursor: For setup and debugging.
+Notes on Questions
+Competitor Parsing via Puppeteer
+Details: Puppeteer automates browser actions for parsing data unavailable via APIs (e.g., competitor prices, promotions). Implementation via Cloud Functions involves:
+A Cloud Function receives a request (e.g., competitor URL).
+Puppeteer runs in headless mode, extracts data (prices, reviews).
+Data is saved to Firestore or returned to the app.
+Alternative: Use existing GAS scripts, integrating them into the app UI (button to trigger parsing, results in a table). Needs discussion on the preferred approach.
+Export to Google Sheets and Embedded Tables
+Embedded Tables: Material-UI DataGrid for displaying data (sales, orders, products) with filters, sorting, column customization. Automation: auto-updates, notifications (e.g., "Low inventory").
+Charts and Widgets: Chart.js for visualizing key metrics (sales, orders, inventory) with customization (select period, chart type: line, bar).
+Export: "Export to Google Sheets" button creates tables via Google Sheets API.
+Creating Tables in Google Sheets
+Logic: Google Sheets API creates tables for:
+Sales: Date, product, quantity, amount.
+Orders: Order number, date, status, amount.
+Products: Name, SKU, price, inventory.
+UI: "Export" button in "Analytics". Needs discussion on data to include.
+Planned Integrations
+Google Calendar: Scheduling promotions.
+Google Trends: Trend analysis.
+Google Analytics: Traffic analytics.
+1C, Bitrix24, MoySklad: Synchronization of sales, inventory.
+Telegram, WhatsApp: Notifications via bots.
+Git/GitHub: Version Control
+Purpose: Tracks changes to revert to a working version if needed:
+git checkout <commit-hash> — revert to previous version.
+git log — view change history.
+Cloning to GitHub
+Logic: The project needs to be uploaded to GitHub for version control and cloud development in Firebase Studio.
+Steps for Discussion:
+Create a GitHub repository (e.g., narvinIR/marketplace-analytics).
+Initialize Git in the project:
+powershell
+
+Копировать
+cd C:\Users\Public\ServiceMPdrive
+git init
+git add .
+git commit -m "Initial commit"
+Link to GitHub and push:
+powershell
+
+Копировать
+git remote add origin https://github.com/narvinIR/marketplace-analytics.git
+git branch -M main
+git push -u origin main
+Coordination: Discuss repository name, access rights (public/private).
+Firebase Config Setup
+Verification:
+File src/firebase/config.js:
+javascript
+
+Копировать
+import { initializeApp } from "firebase/app";
+
+const firebaseConfig = {
+  apiKey: "XXX",
+  authDomain: "marketplaceanalytics-716-5e937.firebaseapp.com",
+  projectId: "marketplaceanalytics-716-5e937",
+  storageBucket: "marketplaceanalytics-716-5e937.appspot.com",
+  messagingSenderId: "XXX",
+  appId: "XXX",
+};
+
+const app = initializeApp(firebaseConfig);
+export default app;
+Verify that all values match Firebase Console → marketplaceanalytics-716-5e937 → Project Settings → Your apps → Firebase SDK snippet.
+Data Collection
+Logic: Use GAS scripts for API requests and parsing. UI: buttons to trigger scripts, results in tables.
+Coordination: Discuss GAS script integration, UI structure, table format.
+Visualization
+Logic: Chart.js for charts, Material-UI DataGrid for tables. Needs discussion on metrics, design, settings.
+Review Automation
+Logic: Integrate GAS scripts for AI responses to reviews. UI: "Respond to Reviews" button. Needs discussion on implementation.
+Creative Features (Updated)
+Sales Forecasts: Machine learning for demand prediction.
+Promotion Automation: Scheduling discounts via Google Calendar.
+Inventory Management: Auto-order for low inventory.
+Telegram Integration: Chatbot for management.
+WhatsApp Integration: Notifications and customer chat.
+Custom Dashboards: User-defined widgets.
+Real-time Notifications: Competitor price changes.
+SEO Optimization: Tools for listing optimization.
+Order Management: Optimized processing.
+Product Tracking: Analysis of best/worst products.
+Trend Analysis: Market opportunity identification.
+Custom Reports: Report generation and scheduling.
+API Access: Integration with other systems.
+Gamification: Rewards for achievements.
+Multilingual Support: Russian and English.
+Team Collaboration: Access for seller teams.
+Competitor Analytics: Price, promotion, review comparison.
+Returns Management: Analysis and automation.
+MoySklad Integration: Inventory synchronization.
+1C Integration: Financial analytics.
+Key References
+MatX React Documentation
+Firebase Authentication
+Firestore
+Cloud Functions
+Cloud Messaging
+React
+Material-UI
+Chart.js
+React Router
+Axios
+Google Apps Script
+Google APIs
+Vite
+GitHub
+Firebase Studio
